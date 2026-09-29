@@ -1,4 +1,4 @@
-# AI Cybersecurity Project Manager
+# AI Cybersecurity Project
 
 This project is a simple AI-powered cybersecurity risk prioritization prototype.
 
@@ -20,22 +20,16 @@ The prototype intentionally uses a simple architecture:
 
 10 Cybersecurity Risks
         |
-        v
    risks.json
         |
-        v
      Python
         |
-        v
    OpenAI API
         |
-        v
 AI Cybersecurity Project Manager
         |
-        v
 Risk Ranking + Remediation Plan
         |
-        v
  Streamlit UI + Markdown Output
 
 
@@ -45,21 +39,3 @@ Risk Ranking + Remediation Plan
 - OpenAI API
 - Streamlit
 - JSON
-
-
-## Project Structure
-
-```text
-cybersecurity-agent/
-│
-├── app.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-├── README.md
-│
-├── data/
-│   └── risks.json
-│
-└── outputs/
-    └── agent_output.md
