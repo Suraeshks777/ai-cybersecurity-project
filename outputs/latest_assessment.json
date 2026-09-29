@@ -1,0 +1,210 @@
+{
+  "executive_summary": "Prioritize R-02, R-01, and R-06. They combine internet exposure, high exploitability, and potentially material compromise or sensitive-data loss. R-06 is elevated to rank 2 because public PII exposure is directly actionable and can cause immediate disclosure; R-01 follows because password-only VPN access creates a broad entry path. The remaining risks should be sequenced around privilege reduction, credential protection, endpoint coverage, recoverability, detection, third-party access, and segmentation.",
+  "ranking": [
+    {
+      "rank": 1,
+      "risk_id": "R-02",
+      "title": "Critical RCE patches missing on internet-facing servers",
+      "priority": "Critical",
+      "baseline_score": 5.0,
+      "summary_reason": "Highest baseline and direct alignment with the decision principles: internet-facing services, public exploit information, remote code execution, and material compromise potential."
+    },
+    {
+      "rank": 2,
+      "risk_id": "R-06",
+      "title": "Public cloud storage contains customer PII",
+      "priority": "Critical",
+      "baseline_score": 4.7,
+      "summary_reason": "Moved ahead of R-01 because public read access to customer PII is an active disclosure condition, readily exploitable without authentication, and immediately reducible."
+    },
+    {
+      "rank": 3,
+      "risk_id": "R-01",
+      "title": "Remote-access VPN does not enforce MFA",
+      "priority": "High",
+      "baseline_score": 4.75,
+      "summary_reason": "Although its baseline is higher than R-06, MFA deployment is a strong near-term control; it remains a broad internet-exposed entry path with high business impact."
+    },
+    {
+      "rank": 4,
+      "risk_id": "R-03",
+      "title": "Standing over-privileged administrator accounts",
+      "priority": "High",
+      "baseline_score": 4.3,
+      "summary_reason": "Persistent administrative access substantially increases blast radius after compromise, but exploitation generally requires an initial foothold."
+    },
+    {
+      "rank": 5,
+      "risk_id": "R-07",
+      "title": "Secrets stored in CI/CD configuration and repositories",
+      "priority": "High",
+      "baseline_score": 4.0,
+      "summary_reason": "Long-lived credentials could enable significant cloud or production access; ranked below standing admin risk because the register indicates less direct exposure."
+    },
+    {
+      "rank": 6,
+      "risk_id": "R-04",
+      "title": "EDR missing from a portion of corporate endpoints",
+      "priority": "High",
+      "baseline_score": 4.0,
+      "summary_reason": "Thirty percent coverage gap weakens detection and response across endpoints, but does not itself provide an identified attack path."
+    },
+    {
+      "rank": 7,
+      "risk_id": "R-05",
+      "title": "No immutable or offline backup copy",
+      "priority": "Medium",
+      "baseline_score": 3.85,
+      "summary_reason": "Important ransomware recoverability gap with high impact, but lower immediate exploitability and no stated evidence of current compromise."
+    },
+    {
+      "rank": 8,
+      "risk_id": "R-09",
+      "title": "Privileged and cloud activity is not centrally monitored",
+      "priority": "Medium",
+      "baseline_score": 3.75,
+      "summary_reason": "Limits detection and containment, especially for privileged misuse, but is primarily a force multiplier for other risks."
+    },
+    {
+      "rank": 9,
+      "risk_id": "R-10",
+      "title": "Critical third-party access is not regularly reviewed",
+      "priority": "Medium",
+      "baseline_score": 3.45,
+      "summary_reason": "Unclear vendor ownership and stale access create exposure, but the register provides less evidence of broad or directly exploitable access."
+    },
+    {
+      "rank": 10,
+      "risk_id": "R-08",
+      "title": "Flat internal network with limited segmentation",
+      "priority": "Medium",
+      "baseline_score": 3.3,
+      "summary_reason": "Increases lateral movement and blast radius, but is less urgent than the identified externally exposed and directly exploitable conditions."
+    }
+  ],
+  "top_three": [
+    {
+      "risk_id": "R-02",
+      "title": "Critical RCE patches missing on internet-facing servers",
+      "likelihood_reason": "Three internet-facing servers are over 45 days behind on critical patches and include a remotely exploitable issue with public exploit information.",
+      "business_impact_reason": "Successful exploitation could compromise externally reachable servers and provide a path to material business or data impact.",
+      "exploitability_reason": "Remote exploitation is explicitly identified, public exploit information exists, and the services must remain internet reachable.",
+      "immediate_containment": "Apply emergency patches immediately; until validated, restrict affected services by source IP, firewall rule, or temporary maintenance window where business operations permit.",
+      "estimated_total_duration": "1\u20133 business days for containment and patching; 1\u20132 weeks for validation, inventory correction, and process hardening.",
+      "remediation_steps": [
+        {
+          "order": 1,
+          "action": "Confirm affected hosts, services, versions, dependencies, and available patches; establish rollback and maintenance plans.",
+          "owner": "Infrastructure/Systems Engineering",
+          "effort": "4\u20138 hands-on hours",
+          "dependency_or_note": "Coordinate with service owners because services must remain reachable."
+        },
+        {
+          "order": 2,
+          "action": "Implement temporary exposure reduction and patch all three servers, prioritizing the publicly exploitable condition.",
+          "owner": "Infrastructure/Systems Engineering",
+          "effort": "8\u201316 hands-on hours",
+          "dependency_or_note": "Requires approved maintenance or tested emergency change."
+        },
+        {
+          "order": 3,
+          "action": "Validate remediation with authenticated scanning, service testing, and exploitation-path checks.",
+          "owner": "Security Engineering",
+          "effort": "4\u20138 hands-on hours",
+          "dependency_or_note": "Validation follows patch completion and service recovery."
+        },
+        {
+          "order": 4,
+          "action": "Close inventory and patch-process gaps, including ownership, critical-age alerts, and escalation thresholds.",
+          "owner": "Security and IT Operations",
+          "effort": "2\u20135 hands-on days",
+          "dependency_or_note": "Use findings from the three-server remediation to improve repeatability."
+        }
+      ]
+    },
+    {
+      "risk_id": "R-06",
+      "title": "Public cloud storage contains customer PII",
+      "likelihood_reason": "The storage container permits public read access and can be accessed without authentication; cloud logging exists but does not prevent exposure.",
+      "business_impact_reason": "Customer names, email addresses, and ticket content could be disclosed, creating direct confidentiality and trust impact.",
+      "exploitability_reason": "Public read access is directly exploitable and requires no credential compromise.",
+      "immediate_containment": "Remove public read access and enable the provider's public-access prevention control for the affected storage scope; preserve logs and configuration evidence before changes where practical.",
+      "estimated_total_duration": "Same day to contain; 1\u20132 weeks for full review, migration if needed, and preventive guardrails.",
+      "remediation_steps": [
+        {
+          "order": 1,
+          "action": "Identify the container, objects, access policies, exposure duration, and affected data; preserve relevant logs.",
+          "owner": "Cloud Engineering and Security",
+          "effort": "4\u20138 hands-on hours",
+          "dependency_or_note": "Do not delay access removal while completing retrospective analysis."
+        },
+        {
+          "order": 2,
+          "action": "Block public access, rotate or invalidate exposed access paths if applicable, and verify anonymous requests fail.",
+          "owner": "Cloud Engineering",
+          "effort": "2\u20134 hands-on hours",
+          "dependency_or_note": "Coordinate with support-export consumers to avoid unintended service disruption."
+        },
+        {
+          "order": 3,
+          "action": "Review access logs and determine the affected object set and required internal response actions.",
+          "owner": "Security/Incident Response",
+          "effort": "1\u20133 hands-on days",
+          "dependency_or_note": "Analysis depends on available cloud logging retention and object history."
+        },
+        {
+          "order": 4,
+          "action": "Enforce organization-wide public-access prevention and add policy-as-code or deployment checks for storage exposure.",
+          "owner": "Cloud Platform Engineering",
+          "effort": "3\u20137 hands-on days",
+          "dependency_or_note": "Test against legitimate private sharing and export workflows before broad enforcement."
+        }
+      ]
+    },
+    {
+      "risk_id": "R-01",
+      "title": "Remote-access VPN does not enforce MFA",
+      "likelihood_reason": "Approximately 180 employees and contractors use password-only, internet-exposed VPN authentication; credential attacks are a realistic entry path.",
+      "business_impact_reason": "A compromised VPN account could provide authenticated corporate access and enable follow-on intrusion or data access.",
+      "exploitability_reason": "Password authentication is internet exposed, and the absence of MFA removes a major barrier to account takeover.",
+      "immediate_containment": "Require MFA for administrators and highest-risk remote users first, disable stale accounts, and increase monitoring or rate controls on VPN authentication while completing rollout.",
+      "estimated_total_duration": "2\u20136 weeks for staged deployment, user enrollment, exception handling, and enforcement.",
+      "remediation_steps": [
+        {
+          "order": 1,
+          "action": "Confirm VPN MFA compatibility, identity-provider integration, user population, break-glass accounts, and support requirements.",
+          "owner": "Identity and Network Engineering",
+          "effort": "1\u20133 hands-on days",
+          "dependency_or_note": "Requires an approved authentication design and tested recovery path."
+        },
+        {
+          "order": 2,
+          "action": "Pilot MFA with IT administrators and a representative employee/contractor group; test device loss and lockout recovery.",
+          "owner": "Identity Engineering and Service Desk",
+          "effort": "3\u20135 hands-on days",
+          "dependency_or_note": "Resolve enrollment and compatibility issues before broad rollout."
+        },
+        {
+          "order": 3,
+          "action": "Enroll the remaining users in waves, communicating deadlines and providing support.",
+          "owner": "Identity Engineering and Service Desk",
+          "effort": "5\u201310 hands-on days",
+          "dependency_or_note": "Sequence by business group and maintain a documented exception process."
+        },
+        {
+          "order": 4,
+          "action": "Enforce MFA for all VPN access, remove unnecessary exceptions, and monitor failed and anomalous authentication.",
+          "owner": "Network Security and Security Operations",
+          "effort": "1\u20133 hands-on days",
+          "dependency_or_note": "Complete validation and incident escalation procedures before enforcement."
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Risk register scores and scenarios are the available evidence; no additional vulnerabilities, assets, controls, or regulatory obligations were assumed.",
+    "Effort means hands-on team effort; estimated duration includes elapsed coordination, testing, approvals, and user rollout.",
+    "R-06 containment can be performed without an unlisted business requirement for public anonymous access.",
+    "R-02 emergency patching can be scheduled or performed under an emergency change process."
+  ]
+}

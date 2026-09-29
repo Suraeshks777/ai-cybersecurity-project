@@ -1,0 +1,9 @@
+{
+  "note": "Illustrative example only. Replace this file with the reviewed output from an actual agent run before submitting.",
+  "expected_baseline_top_three": [
+    "R-02 Critical RCE patches missing on internet-facing servers",
+    "R-01 Remote-access VPN does not enforce MFA",
+    "R-06 Public cloud storage contains customer PII"
+  ],
+  "demo_message": "Run `python run_agent.py` to generate outputs/latest_assessment.json."
+}

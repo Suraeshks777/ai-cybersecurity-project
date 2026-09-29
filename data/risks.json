@@ -1,0 +1,52 @@
+[
+  {
+    "id": "R1",
+    "risk": "No MFA on remote-access VPN",
+    "context": "Employees and contractors can connect to the corporate VPN using only a username and password."
+  },
+  {
+    "id": "R2",
+    "risk": "Unpatched internet-facing servers",
+    "context": "Three public-facing servers are more than 45 days behind on critical security patches."
+  },
+  {
+    "id": "R3",
+    "risk": "Over-privileged administrator accounts",
+    "context": "Several IT administrator accounts have permanent administrative privileges and are also used for normal day-to-day activities."
+  },
+  {
+    "id": "R4",
+    "risk": "EDR missing on some corporate endpoints",
+    "context": "Around 30 percent of employee laptops are not currently enrolled in the company's endpoint detection and response platform."
+  },
+  {
+    "id": "R5",
+    "risk": "No offline or immutable backups",
+    "context": "Production backups exist, but all copies remain online and are managed within the same cloud environment as production systems."
+  },
+  {
+    "id": "R6",
+    "risk": "Public cloud storage containing customer data",
+    "context": "A cloud storage container containing customer support exports can currently be accessed publicly."
+  },
+  {
+    "id": "R7",
+    "risk": "Secrets stored in source code and CI/CD systems",
+    "context": "Long-lived service account credentials were discovered in repository history and CI/CD environment variables."
+  },
+  {
+    "id": "R8",
+    "risk": "Limited internal network segmentation",
+    "context": "Employee workstations and several internal application servers can communicate broadly across the internal corporate network."
+  },
+  {
+    "id": "R9",
+    "risk": "Security logs are not centrally monitored",
+    "context": "Authentication, cloud, and administrator activity logs exist but are not consistently sent to a central SIEM for monitoring and alerting."
+  },
+  {
+    "id": "R10",
+    "risk": "Third-party access is not regularly reviewed",
+    "context": "Several vendors still have remote access or SaaS access even after their original projects have ended."
+  }
+]
