@@ -1,4 +1,4 @@
-# AI Cybersecurity Project Manager
+# AI Cybersecurity Project
 
 A simple AI prototype that reviews cybersecurity risks for a mid-size company and creates a prioritized remediation plan.
 
@@ -21,17 +21,3 @@ The application takes 10 cybersecurity risks and asks an AI model acting as a Cy
 - OpenAI API
 - Streamlit
 - JSON
-
-## Project Structure
-
-```text
-cybersecurity-agent/
-├── app.py
-├── README.md
-├── requirements.txt
-├── .env.example
-├── .gitignore
-├── data/
-│   └── risks.json
-└── outputs/
-    └── agent_output.md
