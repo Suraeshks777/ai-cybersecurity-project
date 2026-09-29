@@ -1,41 +1,37 @@
-# AI Cybersecurity Project
+# AI Cybersecurity Project Manager
 
-This project is a simple AI-powered cybersecurity risk prioritization prototype.
+A simple AI prototype that reviews cybersecurity risks for a mid-size company and creates a prioritized remediation plan.
 
-The application takes 10 cybersecurity risks for a fictional mid-size company and asks an AI model acting as a Cybersecurity Project Manager to:
+## What It Does
 
-1. Rank all 10 risks.
-2. Identify the top 3.
-3. Explain the top 3 based on:
+The application takes 10 cybersecurity risks and asks an AI model acting as a Cybersecurity Project Manager to:
+
+1. Rank all 10 risks from highest to lowest priority.
+2. Explain why the top 3 are the most important based on:
    - likelihood
    - business impact
    - exploitability
-4. Estimate remediation time.
-5. Create ordered remediation steps.
-6. Estimate effort for each remediation step.
+3. Estimate remediation time for each top risk.
+4. Create ordered remediation steps.
+5. Estimate the effort required for each step.
 
-## Architecture
-
-The prototype intentionally uses a simple architecture:
-
-10 Cybersecurity Risks
-        |
-   risks.json
-        |
-     Python
-        |
-   OpenAI API
-        |
-AI Cybersecurity Project Manager
-        |
-Risk Ranking + Remediation Plan
-        |
- Streamlit UI + Markdown Output
-
-
-## Technology
+## Tech Used
 
 - Python
 - OpenAI API
 - Streamlit
 - JSON
+
+## Project Structure
+
+```text
+cybersecurity-agent/
+├── app.py
+├── README.md
+├── requirements.txt
+├── .env.example
+├── .gitignore
+├── data/
+│   └── risks.json
+└── outputs/
+    └── agent_output.md

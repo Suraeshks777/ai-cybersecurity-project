@@ -42,7 +42,7 @@ Tasks:
 - business impact
 - exploitability
 
-3. Estimate remediation time for each top 3 risk.
+3. Estimate remediation time for each of the top 3 risks.
 
 4. Give remediation steps in order.
 
@@ -89,15 +89,16 @@ Repeat for the remaining top risks.
 
 
 def run_agent(risks):
-    client = OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
+    api_key = os.getenv("OPENAI_API_KEY")
+    model = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
+
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY is missing from the .env file.")
+
+    client = OpenAI(api_key=api_key)
 
     response = client.responses.create(
-        model=os.getenv(
-            "OPENAI_MODEL",
-            "gpt-5.6-luna"
-        ),
+        model=model,
         input=build_prompt(risks),
     )
 
@@ -107,11 +108,14 @@ def run_agent(risks):
 st.title("AI Cybersecurity Project Manager")
 
 st.write(
-    "This prototype ranks cybersecurity risks and creates "
-    "remediation plans for the top three."
+    "Ranks cybersecurity risks and creates remediation plans for the top three."
 )
 
-risks = load_risks()
+try:
+    risks = load_risks()
+except Exception as error:
+    st.error(f"Could not load risks.json: {error}")
+    st.stop()
 
 st.subheader("Risk Register")
 
@@ -127,33 +131,25 @@ st.dataframe(
     hide_index=True,
 )
 
-
 if st.button("Analyze Risks"):
 
-    if not os.getenv("OPENAI_API_KEY"):
-        st.write("OPENAI_API_KEY is missing.")
+    try:
 
-    else:
+        result = run_agent(risks)
 
-        try:
+        OUTPUT_FILE.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
 
-            result = run_agent(risks)
+        OUTPUT_FILE.write_text(
+            result,
+            encoding="utf-8",
+        )
 
-            OUTPUT_FILE.parent.mkdir(
-                exist_ok=True
-            )
+        st.subheader("Agent Output")
+        st.markdown(result)
 
-            OUTPUT_FILE.write_text(
-                result,
-                encoding="utf-8",
-            )
-
-            st.subheader("Agent Output")
-
-            st.markdown(result)
-
-        except Exception as error:
-
-            st.write(
-                f"Error: {error}"
-            )
+    except Exception as error:
+        st.error("The analysis failed.")
+        st.exception(error)

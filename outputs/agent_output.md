@@ -1,99 +1,108 @@
 ## Risk Ranking
 
 1. **R6. Public cloud storage containing customer data**
-2. **R2. Unpatched internet-facing servers**
-3. **R1. No MFA on remote-access VPN**
+2. **R1. No MFA on remote-access VPN**
+3. **R2. Unpatched internet-facing servers**
 4. **R7. Secrets stored in source code and CI/CD systems**
 5. **R5. No offline or immutable backups**
 6. **R3. Over-privileged administrator accounts**
-7. **R10. Third-party access is not regularly reviewed**
-8. **R4. EDR missing on some corporate endpoints**
-9. **R9. Security logs are not centrally monitored**
-10. **R8. Limited internal network segmentation**
+7. **R8. Limited internal network segmentation**
+8. **R10. Third-party access is not regularly reviewed**
+9. **R4. EDR missing on some corporate endpoints**
+10. **R9. Security logs are not centrally monitored**
 
 ## Top 3 Risk Analysis
 
-### 1. Public Cloud Storage Containing Customer Data
+### 1. R6. Public Cloud Storage Containing Customer Data
 
-**Likelihood:** High. The storage container is currently publicly accessible and can be discovered or accessed through automated scanning.
+**Likelihood:** High. The data is directly exposed to the internet and may be discoverable through scanning or misconfiguration searches.
 
-**Business Impact:** Critical. Potential customer-data breach, regulatory notification, contractual penalties, loss of customer trust, and legal or reputational damage.
+**Business Impact:** Critical. Potential customer-data disclosure, regulatory penalties, breach notification costs, reputational damage, and loss of customer trust.
 
-**Exploitability:** Very high. Exploitation may require only a publicly accessible URL or cloud API request, depending on the container configuration.
+**Exploitability:** Very high. If the container permits anonymous listing or download, no credentials or advanced skills may be required.
 
-**Estimated Remediation Time:** Immediate exposure reduction within **1–4 hours**; full investigation and remediation within **3–5 business days**.
+**Estimated Remediation Time:** Immediate containment within hours; full remediation in **1–2 weeks**.
 
 **Remediation Steps:**
 
-1. Disable public access and restrict the container to approved identities and networks.  
-   **Effort:** 1–2 hours
+1. Disable public access immediately and preserve access logs for investigation.  
+   **Effort:** 2–4 hours
 
-2. Preserve access logs and determine what data was exposed and for how long.  
-   **Effort:** 4–8 hours
+2. Identify the exposed data, exposure duration, access activity, and affected customers.  
+   **Effort:** 1–2 person-days
 
-3. Review cloud permissions, access policies, sharing links, and service accounts; remove unnecessary access.  
-   **Effort:** 4–8 hours
+3. Rotate exposed access keys, signed URLs, and service credentials associated with the storage container.  
+   **Effort:** 0.5–1 person-day
 
-4. Assess whether data was accessed or exfiltrated and escalate to legal, privacy, and incident response teams as required.  
-   **Effort:** 8–24 hours
+4. Implement least-privilege IAM, deny-public-access controls, encryption, and appropriate retention policies.  
+   **Effort:** 1–3 person-days
 
-5. Rotate exposed credentials and implement preventive controls, including public-access policies, configuration monitoring, and alerting.  
-   **Effort:** 1–3 business days
+5. Scan other cloud storage resources for similar exposure.  
+   **Effort:** 2–4 person-days
+
+6. Complete legal/privacy assessment and implement continuous cloud-configuration monitoring.  
+   **Effort:** 2–5 person-days
 
 ---
 
-### 2. Unpatched Internet-Facing Servers
+### 2. R1. No MFA on Remote-Access VPN
 
-**Likelihood:** High. Public-facing systems more than 45 days behind on critical patches are likely targets for automated exploitation and vulnerability scanning.
+**Likelihood:** High. Passwords can be stolen through phishing, password reuse, credential stuffing, or malware.
 
-**Business Impact:** Critical. Successful exploitation could result in ransomware, data theft, service disruption, unauthorized access, or use of the servers as a foothold into the internal network.
+**Business Impact:** High. A compromised VPN account could provide direct internal access, enable ransomware deployment, data theft, and lateral movement.
 
-**Exploitability:** High. The systems are internet-facing, and critical vulnerabilities often have public proof-of-concept code or active exploitation.
+**Exploitability:** High. Attackers can automate password attacks or use harvested credentials. VPN access is often an attractive initial-access target.
 
-**Estimated Remediation Time:** Emergency patching within **24–48 hours**; complete validation and process improvements within **1–2 weeks**.
+**Estimated Remediation Time:** **2–4 weeks**, depending on VPN and identity-provider integration.
 
 **Remediation Steps:**
 
-1. Identify the missing patches, affected services, exploit status, and system owners.  
-   **Effort:** 2–4 hours
+1. Inventory VPN users, contractors, authentication methods, and emergency access accounts.  
+   **Effort:** 1–2 person-days
 
-2. Apply critical patches using an emergency change process, beginning with the most exposed or vulnerable server.  
-   **Effort:** 4–8 hours
+2. Configure MFA integration with the corporate identity provider and test with IT users.  
+   **Effort:** 2–4 person-days
 
-3. If immediate patching is not possible, apply temporary controls such as restricting access, disabling vulnerable services, or adding WAF/IPS rules.  
-   **Effort:** 2–6 hours
+3. Pilot MFA with a small employee and contractor group; resolve compatibility and recovery issues.  
+   **Effort:** 2–3 person-days
 
-4. Validate service functionality, rescan for vulnerabilities, and review logs for indicators of compromise.  
-   **Effort:** 4–8 hours
+4. Enforce MFA for all VPN users and disable password-only access.  
+   **Effort:** 1–3 person-days
 
-5. Establish patch SLAs, automated vulnerability scanning, maintenance ownership, and exception tracking.  
-   **Effort:** 1–2 weeks
+5. Review and remove inactive accounts; require approval and expiration dates for contractor access.  
+   **Effort:** 1–2 person-days
+
+6. Monitor VPN authentication logs and investigate failed-login spikes or unusual locations.  
+   **Effort:** 1–2 person-days
 
 ---
 
-### 3. No MFA on Remote-Access VPN
+### 3. R2. Unpatched Internet-Facing Servers
 
-**Likelihood:** High. Passwords can be stolen through phishing, credential stuffing, malware, or reuse from third-party breaches.
+**Likelihood:** High. Public-facing systems are continuously scanned, and critical vulnerabilities are frequently weaponized.
 
-**Business Impact:** High to critical. A compromised VPN account could provide direct access to internal systems, sensitive data, and administrative pathways, potentially enabling ransomware or major data theft.
+**Business Impact:** High to critical. Exploitation could result in web-shell installation, data theft, service disruption, ransomware, or compromise of internal systems.
 
-**Exploitability:** High. An attacker needs only valid credentials and VPN access; no endpoint compromise may be required.
+**Exploitability:** High. The systems are internet-facing, more than 45 days behind on critical patches, and may be vulnerable to publicly documented exploits.
 
-**Estimated Remediation Time:** Initial protection within **3–5 business days**; full deployment and cleanup within **1–2 weeks**.
+**Estimated Remediation Time:** **1–2 weeks** for the initial backlog; ongoing patch compliance should be established afterward.
 
 **Remediation Steps:**
 
-1. Select and configure the MFA method integrated with the VPN and identity provider.  
-   **Effort:** 4–8 hours
+1. Validate the server inventory, operating systems, exposed services, vulnerabilities, and available patches.  
+   **Effort:** 1 person-day
 
-2. Enroll employees and contractors, prioritize administrators and remote-access users, and define support procedures.  
-   **Effort:** 2–5 business days
+2. Apply emergency compensating controls, such as restricting access through a firewall or WAF, where immediate patching is not possible.  
+   **Effort:** 0.5–1 person-day
 
-3. Enforce MFA for all VPN users and disable password-only and legacy authentication methods.  
-   **Effort:** 2–4 hours
+3. Back up configurations and verify recovery procedures before patching.  
+   **Effort:** 1–2 person-days
 
-4. Secure and test break-glass accounts, recovery codes, and help-desk identity verification procedures.  
-   **Effort:** 4–8 hours
+4. Test and deploy critical patches, prioritizing internet-facing services and known exploited vulnerabilities.  
+   **Effort:** 2–5 person-days
 
-5. Review VPN accounts, disable inactive or unnecessary accounts, rotate compromised credentials, and monitor failed MFA and VPN logins.  
-   **Effort:** 1–2 business days
+5. Conduct vulnerability rescanning and review logs for signs of prior exploitation.  
+   **Effort:** 1–2 person-days
+
+6. Establish a patching SLA, maintenance schedule, exception process, and executive reporting.  
+   **Effort:** 1–2 person-days
