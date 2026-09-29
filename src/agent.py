@@ -19,12 +19,6 @@ RISK_FILE = BASE_DIR / "data" / "risks.json"
 
 @tool
 def get_scored_risk_register() -> str:
-    """Retrieve the 10 company cybersecurity risks with transparent baseline scores.
-
-    The score is a decision aid, not an automatic final ranking. It uses:
-    likelihood 30%, business impact 30%, exploitability 25%, exposure 15%.
-    Every factor is scored from 1 (low) to 5 (very high).
-    """
     risks = json.loads(RISK_FILE.read_text(encoding="utf-8"))
     return json.dumps(score_risk_register(risks), indent=2)
 
@@ -105,7 +99,6 @@ def run_assessment() -> CyberRiskAssessment:
 
 
 def validate_assessment(assessment: CyberRiskAssessment) -> None:
-    """Fail loudly if the LLM violates core assignment constraints."""
     if len(assessment.ranking) != 10:
         raise ValueError("Expected exactly 10 ranked risks.")
     if len(assessment.top_three) != 3:
